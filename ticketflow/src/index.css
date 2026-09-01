@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --color-paper: #faf7f0;
+  --color-paper-raised: #ffffff;
+  --color-ink: #1f2421;
+  --color-ink-soft: #5b5850;
+  --color-line: #e4ddcd;
+
+  --color-stamp-open: #c4622d;
+  --color-stamp-open-bg: #fbe9e0;
+  --color-stamp-progress: #8b8578;
+  --color-stamp-progress-bg: #efece3;
+  --color-stamp-resolved: #3f6b4f;
+  --color-stamp-resolved-bg: #e3ede6;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}

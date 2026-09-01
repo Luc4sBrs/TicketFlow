@@ -1,0 +1,31 @@
+{
+  "tickets": [
+    {
+      "id": "0231",
+      "title": "Login trava na tela de carregamento",
+      "description": "Ao tentar entrar pelo app mobile, a tela de loading fica girando indefinidamente após inserir a senha correta.",
+      "status": "open",
+      "priority": "high",
+      "requester": "Marina Costa",
+      "createdAt": "2026-08-28T14:12:00.000Z"
+    },
+    {
+      "id": "0230",
+      "title": "Exportação de relatório em CSV com acentos quebrados",
+      "description": "Ao exportar o relatório mensal, caracteres com acento aparecem como símbolos estranhos no Excel.",
+      "status": "in_progress",
+      "priority": "medium",
+      "requester": "Diego Falcão",
+      "createdAt": "2026-08-25T09:40:00.000Z"
+    },
+    {
+      "id": "0229",
+      "title": "Botão de convidar time não responde",
+      "description": "Nada acontece ao clicar em 'Convidar', nem loading nem erro.",
+      "status": "resolved",
+      "priority": "low",
+      "requester": "Helena Prado",
+      "createdAt": "2026-08-19T17:05:00.000Z"
+    }
+  ]
+}
