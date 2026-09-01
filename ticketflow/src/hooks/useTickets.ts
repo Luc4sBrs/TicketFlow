@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createTicket, fetchTicketById, fetchTickets } from "../api/tickets";
-import type { NewTicketInput } from "../types/ticket";
+import {
+  createTicket,
+  fetchTicketById,
+  fetchTickets,
+  updateTicketStatus,
+} from "../api/tickets";
+import type { NewTicketInput, TicketStatus } from "../types/ticket";
 
 const ticketsKey = ["tickets"] as const;
 const ticketKey = (id: string) => ["tickets", id] as const;
@@ -26,7 +31,21 @@ export function useCreateTicket() {
   return useMutation({
     mutationFn: (input: NewTicketInput) => createTicket(input),
     onSuccess: () => {
-      // Invalida a lista para refletir o novo ticket sem recarregar a página.
+      // O Socket.IO também atualiza o cache em tempo real (ver useTicketSocket),
+      // mas invalidamos aqui também para cobrir quem estiver sem conexão em tempo real.
+      queryClient.invalidateQueries({ queryKey: ticketsKey });
+    },
+  });
+}
+
+export function useUpdateTicketStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: TicketStatus }) =>
+      updateTicketStatus(id, status),
+    onSuccess: (ticket) => {
+      queryClient.setQueryData(ticketKey(ticket.id), ticket);
       queryClient.invalidateQueries({ queryKey: ticketsKey });
     },
   });

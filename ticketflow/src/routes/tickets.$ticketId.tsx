@@ -1,9 +1,10 @@
 import { createRoute, Link } from "@tanstack/react-router";
 import { rootRoute } from "./__root";
-import { useTicket } from "../hooks/useTickets";
+import { useTicket, useUpdateTicketStatus } from "../hooks/useTickets";
 import { LoadingState } from "../components/LoadingState";
 import { ErrorState } from "../components/ErrorState";
 import { StatusBadge } from "../components/StatusBadge";
+import type { TicketStatus } from "../types/ticket";
 
 export const ticketDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -11,9 +12,24 @@ export const ticketDetailRoute = createRoute({
   component: TicketDetailPage,
 });
 
+const NEXT_STATUS: Record<TicketStatus, TicketStatus | null> = {
+  open: "in_progress",
+  in_progress: "resolved",
+  resolved: null,
+};
+
+const NEXT_LABEL: Record<TicketStatus, string> = {
+  open: "Iniciar atendimento",
+  in_progress: "Marcar como resolvido",
+  resolved: "",
+};
+
 function TicketDetailPage() {
   const { ticketId } = ticketDetailRoute.useParams();
   const { data: ticket, isLoading, isError, error, refetch } = useTicket(ticketId);
+  const { mutate: updateStatus, isPending } = useUpdateTicketStatus();
+
+  const nextStatus = ticket ? NEXT_STATUS[ticket.status] : null;
 
   return (
     <div className="space-y-6">
@@ -56,6 +72,22 @@ function TicketDetailPage() {
               <dd className="mt-0.5 capitalize">{ticket.priority}</dd>
             </div>
           </dl>
+
+          {nextStatus && (
+            <div className="border-t border-[var(--color-line)] pt-4">
+              <button
+                onClick={() => updateStatus({ id: ticket.id, status: nextStatus })}
+                disabled={isPending}
+                className="rounded-sm bg-[var(--color-ink)] px-4 py-2 text-sm font-medium text-[var(--color-paper)] transition hover:opacity-90 disabled:opacity-50"
+              >
+                {isPending ? "Atualizando…" : NEXT_LABEL[ticket.status]}
+              </button>
+              <p className="mt-2 text-xs text-[var(--color-ink-soft)]">
+                Abra esta mesma tela em outra aba: a mudança aparece nela em
+                tempo real via Socket.IO.
+              </p>
+            </div>
+          )}
         </article>
       )}
     </div>
